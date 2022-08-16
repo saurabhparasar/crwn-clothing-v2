@@ -17,6 +17,7 @@ const defaultFormFields = {
 const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
+  const {setCurrentUser} = useContext(UserContext)
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -24,7 +25,7 @@ const SignInForm = () => {
       ...formFields,
       [name]: value,
     });
-    console.log(formFields);
+    // console.log(formFields);
   };
   const signInWithGoogleAccount = async () => {
     let { user } = await signInWithGooglePopup();
@@ -38,10 +39,11 @@ const SignInForm = () => {
         email,
         password
       );
+      setCurrentUser(user)
     } catch (error) {
-      if (error.code == "auth/wrong-password") {
+      if (error.code === "auth/wrong-password") {
         alert("incorrect password for email");
-      } else if (error.code == "auth/user-not-found") {
+      } else if (error.code ===  "auth/user-not-found") {
         alert("no user found");
       } else {
         console.log(error);
